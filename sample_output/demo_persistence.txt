@@ -1,0 +1,61 @@
+
+╔══════════════════════════════════════════════╗
+║         🎫  HELP-DESK TICKET MANAGER         ║
+╚══════════════════════════════════════════════╝
+  Database : data/helpdesk_demo.db
+  Tickets  : 16
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 2
+
+📋 List tickets
+  Filter by status (1 Open, 2 In Progress, 3 Closed, Enter = all): 3
+  Filter by priority (1 Critical, 2 High, 3 Medium, 4 Low, Enter = all): 
++-----+------------+---------------+----------+--------+----------------------------------------+
+|  ID | Created    | Customer      | Priority | Status | Issue                                  |
++-----+------------+---------------+----------+--------+----------------------------------------+
+|  14 | 2026-11-01 | Tariq Mehmood | High     | Closed | Website contact form does not send me… |
+|  16 | 2026-11-13 | Ahmed Raza    | High     | Closed | Laptop will not start after the Windo… |
+|  13 | 2026-10-31 | Saima Javed   | Medium   | Closed | Laptop battery drains within one hour. |
+|  15 | 2026-11-02 | Farah Naeem   | Medium   | Closed | Software licence for the design tool … |
+|  12 | 2026-10-30 | Kamran Ali    | Low      | Closed | Forgot the Wi-Fi password for the gue… |
++-----+------------+---------------+----------+--------+----------------------------------------+
+  5 ticket(s): 0 open, 5 closed
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 8
+
+📤 Export summary report
+  File name [ticket_summary.txt] (.txt or .md): sample_output/summary_report.txt
+  ✓ Report saved to sample_output/summary_report.txt
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 0
+Goodbye! All tickets are saved in the database.

@@ -1,0 +1,298 @@
+Added 15 demo ticket(s).
+
+╔══════════════════════════════════════════════╗
+║         🎫  HELP-DESK TICKET MANAGER         ║
+╚══════════════════════════════════════════════╝
+  Database : data/helpdesk_demo.db
+  Tickets  : 15
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 1
+
+➕ Create ticket
+  Customer name: 
+  ✗ Customer name cannot be empty.
+  Customer name: Ahmed Raza
+  Issue: bad
+  ✗ Issue description must be 5 to 500 characters (you typed 3).
+  Issue: Laptop will not start after the Windows update.
+  Priority (1 Critical, 2 High, 3 Medium, 4 Low) [Medium]: 9
+  ✗ Priority must be one of: Critical, High, Medium, Low.
+  Priority (1 Critical, 2 High, 3 Medium, 4 Low) [Medium]: 2
+  ✓ Ticket #16 created (High priority, status Open)
+Ticket #16
+  Customer   : Ahmed Raza
+  Priority   : High
+  Status     : Open
+  Created    : 2026-11-13 09:06:32
+  Updated    : 2026-11-13 09:06:32
+  Age        : 0 day(s) (still open)
+  Issue      : Laptop will not start after the Windows update.
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 2
+
+📋 List tickets
+  Filter by status (1 Open, 2 In Progress, 3 Closed, Enter = all): 1
+  Filter by priority (1 Critical, 2 High, 3 Medium, 4 Low, Enter = all): 
++-----+------------+----------------+----------+--------+----------------------------------------+
+|  ID | Created    | Customer       | Priority | Status | Issue                                  |
++-----+------------+----------------+----------+--------+----------------------------------------+
+|   1 | 2026-11-02 | Ayesha Khan    | Critical | Open   | Office internet is down since the mor… |
+|   4 | 2026-11-06 | Usman Raza     | High     | Open   | Invoice INV-2041 shows the wrong tax … |
+|   5 | 2026-11-09 | Hira Siddiqui  | High     | Open   | Email attachments larger than 5 MB ar… |
+|  16 | 2026-11-13 | Ahmed Raza     | High     | Open   | Laptop will not start after the Windo… |
+|   6 | 2026-11-03 | Imran Sheikh   | Medium   | Open   | Printer on the second floor shows a p… |
+|   8 | 2026-11-08 | Faisal Qureshi | Medium   | Open   | Mobile app crashes when opening the o… |
+|   9 | 2026-11-11 | Mehwish Tariq  | Medium   | Open   | VPN disconnects every 20 minutes when… |
+|  10 | 2026-11-07 | Zain Abbas     | Low      | Open   | Please change the company logo on the… |
+|  11 | 2026-11-12 | Rabia Noor     | Low      | Open   | Monitor in meeting room B has a sligh… |
++-----+------------+----------------+----------+--------+----------------------------------------+
+  9 ticket(s): 9 open, 0 closed
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 4
+
+🔍 Search tickets
+  Search text (customer, issue or ID): email
++-----+------------+---------------+----------+--------+----------------------------------------+
+|  ID | Created    | Customer      | Priority | Status | Issue                                  |
++-----+------------+---------------+----------+--------+----------------------------------------+
+|   5 | 2026-11-09 | Hira Siddiqui | High     | Open   | Email attachments larger than 5 MB ar… |
+|  10 | 2026-11-07 | Zain Abbas    | Low      | Open   | Please change the company logo on the… |
++-----+------------+---------------+----------+--------+----------------------------------------+
+  2 ticket(s) matching 'email': 2 open, 0 closed
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 3
+
+🔎 Ticket details
+  Ticket ID: abc
+  ✗ Ticket ID must be a whole number, for example 12.
+  Ticket ID: 999
+  ✗ No ticket with ID 999 exists.
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 3
+
+🔎 Ticket details
+  Ticket ID: 2
+Ticket #2
+  Customer   : Bilal Ahmed
+  Priority   : Critical
+  Status     : In Progress
+  Created    : 2026-11-10 11:05:00
+  Updated    : 2026-11-10 11:30:00
+  Age        : 3 day(s) (still open)
+  Issue      : Payment gateway returns an error at checkout for every
+               customer.
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 5
+
+✏️  Update ticket
+  Ticket ID: 4
+Ticket #4
+  Customer   : Usman Raza
+  Priority   : High
+  Status     : Open
+  Created    : 2026-11-06 10:20:00
+  Updated    : 2026-11-06 10:20:00
+  Age        : 7 day(s) (still open)
+  Issue      : Invoice INV-2041 shows the wrong tax amount.
+
+  Press Enter to keep a value.
+  New customer name [Usman Raza]: 
+  New issue [Invoice INV-2041 shows the wr…]: 
+  New priority (1 Critical, 2 High, 3 Medium, 4 Low) [High]: 
+  New status (1 Open, 2 In Progress) [Open]: 2
+  ✓ Ticket #4 updated
+Ticket #4
+  Customer   : Usman Raza
+  Priority   : High
+  Status     : In Progress
+  Created    : 2026-11-06 10:20:00
+  Updated    : 2026-11-13 09:06:32
+  Age        : 7 day(s) (still open)
+  Issue      : Invoice INV-2041 shows the wrong tax amount.
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 6
+
+✅ Close ticket
+  Ticket ID: 16
+Ticket #16
+  Customer   : Ahmed Raza
+  Priority   : High
+  Status     : Open
+  Created    : 2026-11-13 09:06:32
+  Updated    : 2026-11-13 09:06:32
+  Age        : 0 day(s) (still open)
+  Issue      : Laptop will not start after the Windows update.
+  Resolution note (optional): Reinstalled the update and the laptop boots normally.
+  Close ticket #16? (y/N): y
+  ✓ Ticket #16 closed at 2026-11-13 09:06:32
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 6
+
+✅ Close ticket
+  Ticket ID: 12
+Ticket #12
+  Customer   : Kamran Ali
+  Priority   : Low
+  Status     : Closed
+  Created    : 2026-10-30 09:00:00
+  Updated    : 2026-10-30 09:20:00
+  Age        : 0 day(s) (until closed)
+  Issue      : Forgot the Wi-Fi password for the guest network.
+  Closed     : 2026-10-30 09:20:00
+  Resolution : Sent the new guest password by email.
+  ! Ticket #12 is already closed.
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 7
+
+📊 Summary
+HELP-DESK SUMMARY: OPEN TICKETS BY PRIORITY
+Generated: 2026-11-13 09:06
+
+Overview
+--------
+  Total tickets       16
+  Open tickets        11  (Open 7, In Progress 4)
+  Closed tickets      5
+  Oldest open ticket  #1, 11 day(s) old, Critical, Ayesha Khan
+
+Open tickets by priority
+------------------------
++----------+------+-------------+------------+-------+---------+
+| Priority | Open | In Progress | Total open | Share | Chart   |
++----------+------+-------------+------------+-------+---------+
+| Critical |    1 |           1 |          2 |   18% | ████    |
+| High     |    1 |           2 |          3 |   27% | █████   |
+| Medium   |    3 |           1 |          4 |   36% | ███████ |
+| Low      |    2 |           0 |          2 |   18% | ████    |
+| TOTAL    |    7 |           4 |         11 |  100% |         |
++----------+------+-------------+------------+-------+---------+
+
+All tickets by status
+---------------------
++-------------+---------+-------+
+| Status      | Tickets | Share |
++-------------+---------+-------+
+| Open        |       7 |   44% |
+| In Progress |       4 |   25% |
+| Closed      |       5 |   31% |
++-------------+---------+-------+
+
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 8
+
+📤 Export summary report
+  File name [ticket_summary.txt] (.txt or .md): sample_output/summary_report.md
+  ✓ Report saved to sample_output/summary_report.md
+
+MAIN MENU
+  1. Create ticket
+  2. List tickets
+  3. View ticket details
+  4. Search tickets
+  5. Update ticket
+  6. Close ticket
+  7. Summary: open tickets by priority
+  8. Export summary report
+  0. Exit
+Choose an option: 0
+Goodbye! All tickets are saved in the database.

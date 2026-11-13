@@ -1,0 +1,27 @@
+# 🎫 Help-Desk Summary: Open Tickets by Priority
+_Generated: 2026-11-13 09:06_
+
+## Overview
+
+- **Total tickets:** 16
+- **Open tickets:** 11  (Open 7, In Progress 4)
+- **Closed tickets:** 5
+- **Oldest open ticket:** #1, 11 day(s) old, Critical, Ayesha Khan
+
+## Open tickets by priority
+
+| Priority | Open | In Progress | Total open | Share | Chart   |
+| :------- | ---: | ----------: | ---------: | ----: | :------ |
+| Critical |    1 |           1 |          2 |   18% | ████    |
+| High     |    1 |           2 |          3 |   27% | █████   |
+| Medium   |    3 |           1 |          4 |   36% | ███████ |
+| Low      |    2 |           0 |          2 |   18% | ████    |
+| TOTAL    |    7 |           4 |         11 |  100% |         |
+
+## All tickets by status
+
+| Status      | Tickets | Share |
+| :---------- | ------: | ----: |
+| Open        |       7 |   44% |
+| In Progress |       4 |   25% |
+| Closed      |       5 |   31% |
