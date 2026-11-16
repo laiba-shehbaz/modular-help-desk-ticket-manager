@@ -11,6 +11,8 @@
   <img src="https://img.shields.io/badge/Domain%203-Task%204-f59e0b" alt="Task 4">
 </p>
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20Preview-16a34a?style=for-the-badge&logo=githubpages&logoColor=white)](https://laiba-shehbaz.github.io/modular-help-desk-ticket-manager/helpdesk_run.html)
+
 <h1 align="center"><img src="assets/icon.svg" width="40" align="top"> Help-Desk Ticket Manager</h1>
 
 <p align="center">
@@ -293,4 +295,10 @@ Task4_HelpDesk_Ticket_Manager/
 
 ---
 
-<p align="center">Made with Python 🐍 and SQLite 🗃️ | Domain 3 - Task 4</p>
+## 👤 Author & Assessment
+
+| | |
+|---|---|
+| **Author** | Laiba Shehbaz |
+| **Assessment** | Python Programming - Advanced Level |
+| **Domain / Task** | Domain 3 - Task 4 (Modular Help-Desk Ticket Manager) |
