@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Help-Desk Ticket Manager (Run)</title><style>
+:root{--bg:#f4f6f8;--cd:#fff;--tx:#1f2933;--mu:#5f6b7a;--bd:#dde2e8;--ac:#7c3aed;--cb:#eef1f4;--ok:#16a34a;--er:#c0392b;--cr:#dc2626;--hi:#ea580c;--me:#ca8a04;--lo:#2563eb}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1419;--cd:#171d24;--tx:#e6eaee;--mu:#9aa5b1;--bd:#2a323b;--ac:#a78bfa;--cb:#222a33;--ok:#4ade80;--er:#f87171;--cr:#f87171;--hi:#fb923c;--me:#facc15;--lo:#60a5fa}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1040px;margin:0 auto;padding:16px}h1{margin:0;font-size:1.5rem}h2{margin:0 0 10px;font-size:1.1rem}.mu{color:var(--mu)}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-top:14px}
+.g{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}label{font-size:.85rem;color:var(--mu);display:block}
+input,select,textarea{width:100%;padding:8px;border:1px solid var(--bd);border-radius:6px;background:var(--cb);color:var(--tx);font:inherit}
+button{padding:7px 13px;border:0;border-radius:6px;background:var(--ac);color:#fff;font:600 13px system-ui;cursor:pointer}button.s{background:var(--cb);color:var(--tx);border:1px solid var(--bd)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-top:10px}.tw{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}th{background:var(--cb);white-space:nowrap}.r{text-align:right}
+#msg{min-height:1.5em;margin-top:8px;font-weight:600}.e{color:var(--er)}.k{color:var(--ok)}
+.p{font-weight:700}.Critical{color:var(--cr)}.High{color:var(--hi)}.Medium{color:var(--me)}.Low{color:var(--lo)}
+.stats{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}.stats div{background:var(--cb);border-radius:8px;padding:10px}.stats b{display:block;font-size:1.15rem}
+.bar{display:inline-block;height:12px;border-radius:3px;background:var(--ac);vertical-align:middle}
+dl{display:grid;grid-template-columns:130px 1fr;gap:4px 12px;margin:0}dt{color:var(--mu)}dd{margin:0}
+footer{margin:24px 0 8px;padding-top:14px;border-top:1px solid var(--bd);text-align:center;color:var(--mu);font-size:.9rem}footer b{color:var(--tx)}
+</style></head><body><main>
+<div class="row" style="justify-content:space-between;align-items:center;margin:0"><div><h1>🎫 Help-Desk Ticket Manager</h1><span class="mu">NovaTech Solutions (fictional) | Domain 3 - Task 4 (browser version of the Python + SQLite tool)</span></div>
+<div class="row" style="margin:0"><button class="s" id="seed">Load 15 demo tickets</button><button class="s" id="wipe">Delete all (new database)</button></div></div>
+<div id="msg" role="status"></div>
+<div class="stats card" id="stats"></div>
+<section class="card"><h2 id="ft">➕ Create ticket</h2><input type="hidden" id="eid">
+<div class="g"><div><label for="cn">Customer name (2-60)</label><input id="cn"></div><div><label for="pr">Priority</label><select id="pr"><option>Medium</option><option>Critical</option><option>High</option><option>Low</option></select></div>
+<div id="stw" hidden><label for="stt">Status</label><select id="stt"><option>Open</option><option>In Progress</option></select></div></div>
+<div style="margin-top:10px"><label for="is">Issue (5-500 characters)</label><textarea id="is" rows="2"></textarea></div>
+<div class="row"><button id="save">Create ticket</button><button class="s" id="cancel" hidden>Cancel update</button></div></section>
+<section class="card"><h2>📋 Tickets</h2><div class="g"><div><label for="fs">Status</label><select id="fs"><option value="">All</option><option>Open</option><option>In Progress</option><option>Closed</option></select></div>
+<div><label for="fp">Priority</label><select id="fp"><option value="">All</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+<div><label for="sq">Search (customer, issue or ID)</label><input id="sq" placeholder="vpn, Ayesha or #5"></div></div>
+<div class="row"><button id="sb">Search</button><button class="s" id="clr">Clear</button></div><div class="tw" style="margin-top:10px"><table id="tt"></table></div></section>
+<section class="card" id="dc" hidden><h2>🔎 Ticket details</h2><dl id="dd"></dl></section>
+<section class="card"><h2>📊 Summary: open tickets by priority</h2><div class="tw"><table id="sm"></table></div><p id="ov" class="mu"></p>
+<div class="row"><button id="etxt">Export .txt</button><button id="emd">Export .md</button></div></section>
+<footer>Made with HTML + JavaScript (browser version of the Python project; tickets are kept in your browser instead of SQLite)<br><b>Author:</b> Laiba Shehbaz &nbsp;|&nbsp; <b>Assessment:</b> Python Programming - Advanced Level, Domain 3 - Task 4</footer>
+</main><script>
+class VErr extends Error{}class NotFound extends Error{}class OpErr extends Error{}
+const PRI=["Critical","High","Medium","Low"],ORD={Critical:0,High:1,Medium:2,Low:3},cl=v=>String(v==null?"":v).split(/\s+/).filter(Boolean).join(" ");
+const V={name(v){const t=cl(v);if(!t)throw new VErr("Customer name cannot be empty.");if(t.length<2||t.length>60)throw new VErr("Customer name must be between 2 and 60 characters.");if(!/^\p{L}[\p{L} .'\-]*$/u.test(t))throw new VErr("Customer name may contain only letters, spaces, dots, apostrophes and hyphens.");return t},
+issue(v){const t=cl(v);if(!t)throw new VErr("Issue description cannot be empty.");if(t.length<5||t.length>500)throw new VErr(`Issue description must be 5 to 500 characters (you typed ${t.length}).`);return t},
+res(v){const t=cl(v);if(!t)return null;if(t.length>300)throw new VErr("Resolution note must be 300 characters or fewer.");return t},
+kw(v){const t=cl(v);if(t.length<2||t.length>50)throw new VErr("Search text must be 2 to 50 characters.");return t},
+pri(v){const t=cl(v).toLowerCase(),p=PRI.find(x=>x.toLowerCase()===t);if(!p)throw new VErr("Priority must be one of: Critical, High, Medium, Low.");return p},
+st(v){const t=cl(v).toLowerCase().replace(/[-_]/g," "),p=["Open","In Progress","Closed"].find(x=>x.toLowerCase()===t);if(!p)throw new VErr("Status must be one of: Open, In Progress, Closed.");return p},
+id(v){const t=cl(v).replace(/^#+/,"");if(!/^\d+$/.test(t))throw new VErr("Ticket ID must be a whole number, for example 12.");const n=+t;if(n<1||n>2e9)throw new VErr("Ticket ID must be a positive number.");return n}};
+const fmt=d=>{const p=n=>String(n).padStart(2,"0");return`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`};
+class Repo{constructor(store){this.s=store;this.rows=store.load()}save(){this.s.save(this.rows)}
+add(n,i,p,st,now){const id=this.rows.reduce((m,r)=>Math.max(m,r.id),0)+1;this.rows.push({id,customer_name:n,issue:i,priority:p,status:st,created_at:now,updated_at:now,closed_at:null,resolution:null});this.save();return id}
+get(id){return this.rows.find(r=>r.id===id)||null}
+list(st,pr){return this.rows.filter(r=>(!st||r.status===st)&&(!pr||r.priority===pr)).sort((a,b)=>(a.status==="Closed")-(b.status==="Closed")||ORD[a.priority]-ORD[b.priority]||a.created_at.localeCompare(b.created_at)||a.id-b.id)}
+search(k,st,pr){const q=k.toLowerCase(),n=/^#?\d+$/.test(k)?+k.replace("#",""):null;return this.list(st,pr).filter(r=>r.customer_name.toLowerCase().includes(q)||r.issue.toLowerCase().includes(q)||r.id===n)}
+update(id,ch){Object.assign(this.get(id),ch);this.save()}
+countStatus(){const o={Open:0,"In Progress":0,Closed:0};this.rows.forEach(r=>o[r.status]++);return o}
+matrix(){const o={};PRI.forEach(p=>o[p]={Open:0,"In Progress":0});this.rows.forEach(r=>{if(r.status!=="Closed")o[r.priority][r.status]++});return o}
+oldest(){return this.rows.filter(r=>r.status!=="Closed").sort((a,b)=>a.created_at.localeCompare(b.created_at)||a.id-b.id)[0]||null}wipe(){this.rows=[];this.save()}}
+class Service{constructor(repo,clock){this.repo=repo;this.clock=clock||(()=>new Date())}now(){return fmt(this.clock())}
+create(n,i,p="Medium"){return this.get(this.repo.add(V.name(n),V.issue(i),V.pri(p),"Open",this.now()))}
+get(id){const n=V.id(id),t=this.repo.get(n);if(!t)throw new NotFound(`No ticket with ID ${n} exists.`);return t}
+list(st,pr){return this.repo.list(st?V.st(st):null,pr?V.pri(pr):null)}search(k,st,pr){return this.repo.search(V.kw(k),st?V.st(st):null,pr?V.pri(pr):null)}
+update(id,o){const t=this.get(id),w={};if(o.customer_name!=null)w.customer_name=V.name(o.customer_name);if(o.issue!=null)w.issue=V.issue(o.issue);if(o.priority!=null)w.priority=V.pri(o.priority);if(o.status!=null)w.status=V.st(o.status);
+if(!Object.keys(w).length)throw new VErr("Nothing to update: give at least one new value.");if(w.status==="Closed")throw new OpErr("Use 'Close ticket' to close a ticket, so a resolution can be recorded.");
+if(t.status==="Closed"&&!(Object.keys(w).length===1&&w.status))throw new OpErr(`Ticket #${t.id} is closed. Reopen it first by setting the status to Open or In Progress.`);
+const ch={};for(const k in w)if(t[k]!==w[k])ch[k]=w[k];if(!Object.keys(ch).length)throw new OpErr(`No changes: ticket #${t.id} already has those values.`);
+if(ch.status&&t.status==="Closed"){ch.closed_at=null;ch.resolution=null}ch.updated_at=this.now();this.repo.update(t.id,ch);return this.get(t.id)}
+close(id,res){const t=this.get(id);if(t.status==="Closed")throw new OpErr(`Ticket #${t.id} is already closed.`);const n=this.now();this.repo.update(t.id,{status:"Closed",closed_at:n,updated_at:n,resolution:V.res(res)});return this.get(t.id)}
+summary(){const sc=this.repo.countStatus();return{total:sc.Open+sc["In Progress"]+sc.Closed,matrix:this.repo.matrix(),sc,oldest:this.repo.oldest()}}}
+const DEMO=[["Ayesha Khan","Office internet is down since the morning, all staff are offline.","Critical","2026-11-02 08:40","Open"],["Bilal Ahmed","Payment gateway returns an error at checkout for every customer.","Critical","2026-11-10 11:05","In Progress"],["Sana Malik","Cannot log in to the customer portal after the password reset.","High","2026-11-04 09:15","In Progress"],["Usman Raza","Invoice INV-2041 shows the wrong tax amount.","High","2026-11-06 10:20","Open"],["Hira Siddiqui","Email attachments larger than 5 MB are not being delivered.","High","2026-11-09 15:45","Open"],["Imran Sheikh","Printer on the second floor shows a paper jam error constantly.","Medium","2026-11-03 13:10","Open"],["Nadia Hussain","Request to add two new users to the shared project folder.","Medium","2026-11-05 09:50","In Progress"],["Faisal Qureshi","Mobile app crashes when opening the order history page.","Medium","2026-11-08 16:25","Open"],["Mehwish Tariq","VPN disconnects every 20 minutes when working from home.","Medium","2026-11-11 08:55","Open"],["Zain Abbas","Please change the company logo on the email signature template.","Low","2026-11-07 12:00","Open"],["Rabia Noor","Monitor in meeting room B has a slight flicker.","Low","2026-11-12 10:10","Open"],["Kamran Ali","Forgot the Wi-Fi password for the guest network.","Low","2026-10-30 09:00","Closed","Sent the new guest password by email."],["Saima Javed","Laptop battery drains within one hour.","Medium","2026-10-31 14:30","Closed","Battery replaced under warranty."],["Tariq Mehmood","Website contact form does not send messages.","High","2026-11-01 10:00","Closed","Fixed the mail server settings and tested the form."],["Farah Naeem","Software licence for the design tool has expired.","Medium","2026-11-02 15:05","Closed","Licence renewed for one year."]];
+function seed(repo){if(repo.rows.length)return 0;DEMO.forEach(([n,i,p,c,s,r])=>{const sv=new Service(repo,()=>new Date(c.replace(" ","T")));const t=sv.create(n,i,p);if(s==="In Progress")sv.update(t.id,{status:s});if(s==="Closed")sv.close(t.id,r)});return DEMO.length}
+const days=(a,now)=>Math.max(0,Math.floor((now-new Date(a.replace(" ","T")))/864e5));
+function report(S,md,now){const s=S.summary(),open=s.sc.Open+s.sc["In Progress"],rows=PRI.map(p=>{const m=s.matrix[p],t=m.Open+m["In Progress"];return[p,m.Open,m["In Progress"],t,open?Math.round(t/open*100)+"%":"0%"]});
+const tb=(h,r)=>md?"| "+h.join(" | ")+" |\n|"+h.map(()=>"---").join("|")+"|\n"+r.map(x=>"| "+x.join(" | ")+" |").join("\n"):[h,...r].map(x=>x.join("  |  ")).join("\n");
+const o=s.oldest;return`${md?"# ":""}HELP-DESK SUMMARY: OPEN TICKETS BY PRIORITY\nGenerated: ${fmt(now).slice(0,16)}\n\n${md?"## ":""}Overview\n  Total tickets: ${s.total}\n  Open tickets: ${open} (Open ${s.sc.Open}, In Progress ${s.sc["In Progress"]})\n  Closed tickets: ${s.sc.Closed}\n  Oldest open ticket: ${o?`#${o.id}, ${days(o.created_at,now)} day(s) old, ${o.priority}, ${o.customer_name}`:"none"}\n\n${md?"## ":""}Open tickets by priority\n${tb(["Priority","Open","In Progress","Total open","Share"],rows)}\n\n${md?"## ":""}All tickets by status\n${tb(["Status","Tickets"],[["Open",s.sc.Open],["In Progress",s.sc["In Progress"]],["Closed",s.sc.Closed]])}\n`}
+//==UI==
+const $=i=>document.getElementById(i),esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store={load(){try{return JSON.parse(localStorage.getItem("helpdesk_v1"))||[]}catch(e){return[]}},save(r){try{localStorage.setItem("helpdesk_v1",JSON.stringify(r))}catch(e){}}};
+const repo=new Repo(store),svc=new Service(repo);let rows=null;
+function say(t,ok){$("msg").textContent=t;$("msg").className=ok?"k":"e"}
+function guard(f){try{return f()}catch(e){if(e instanceof VErr||e instanceof NotFound||e instanceof OpErr){say("✗ "+e.message);return null}throw e}}
+function render(){const s=svc.summary(),open=s.sc.Open+s.sc["In Progress"],now=new Date();
+$("stats").innerHTML=`<div>Total tickets<b>${s.total}</b></div><div>Open<b>${s.sc.Open}</b></div><div>In Progress<b>${s.sc["In Progress"]}</b></div><div>Closed<b>${s.sc.Closed}</b></div>`;
+const list=rows||svc.list($("fs").value,$("fp").value);
+$("tt").innerHTML="<tr><th>ID</th><th>Customer</th><th>Issue</th><th>Priority</th><th>Status</th><th>Created</th><th></th></tr>"+(list.length?list.map(t=>`<tr><td>#${t.id}</td><td>${esc(t.customer_name)}</td><td>${esc(t.issue)}</td><td class="p ${t.priority}">${t.priority}</td><td>${t.status}</td><td>${t.created_at.slice(0,10)}</td><td style="white-space:nowrap"><button class="s" onclick="view(${t.id})">View</button> <button class="s" onclick="edit(${t.id})">${t.status==="Closed"?"Reopen":"Update"}</button>${t.status==="Closed"?"":` <button onclick="closeT(${t.id})">Close</button>`}</td></tr>`).join(""):'<tr><td colspan=7 class="mu">No tickets found. Create one above or load the demo tickets.</td></tr>');
+$("sm").innerHTML="<tr><th>Priority</th><th class=r>Open</th><th class=r>In Progress</th><th class=r>Total open</th><th class=r>Share</th><th>Chart</th></tr>"+PRI.map(p=>{const m=s.matrix[p],t=m.Open+m["In Progress"];return`<tr><td class="p ${p}">${p}</td><td class=r>${m.Open}</td><td class=r>${m["In Progress"]}</td><td class=r>${t}</td><td class=r>${open?Math.round(t/open*100):0}%</td><td><span class="bar" style="width:${t*22}px"></span></td></tr>`}).join("");
+const o=s.oldest;$("ov").textContent=`Total ${s.total} | Open ${open} | Closed ${s.sc.Closed} | Oldest open: ${o?`#${o.id}, ${days(o.created_at,now)} day(s) old, ${o.priority}`:"none"}`}
+window.view=id=>guard(()=>{const t=svc.get(id),now=new Date();$("dc").hidden=false;const rw=[["ID","#"+t.id],["Customer",esc(t.customer_name)],["Issue",esc(t.issue)],["Priority",`<span class="p ${t.priority}">${t.priority}</span>`],["Status",t.status],["Created",t.created_at],["Updated",t.updated_at],["Age",days(t.created_at,now)+" day(s)"],["Closed at",t.closed_at||"-"],["Resolution",esc(t.resolution)||"-"]];
+$("dd").innerHTML=rw.map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join("");$("dc").scrollIntoView({behavior:"smooth"})});
+window.edit=id=>guard(()=>{const t=svc.get(id);$("eid").value=id;$("cn").value=t.customer_name;$("is").value=t.issue;$("pr").value=t.priority;$("stw").hidden=false;$("stt").value=t.status==="Closed"?"Open":t.status;$("ft").textContent=(t.status==="Closed"?"♻️ Reopen / update ticket #":"✏️ Update ticket #")+id;$("save").textContent="Update ticket";$("cancel").hidden=false;say(t.status==="Closed"?"Closed tickets are read-only until reopened: change only the status to reopen.":"");scrollTo({top:0,behavior:"smooth"})});
+window.closeT=id=>{const t=guard(()=>svc.get(id));if(!t)return;const r=prompt(`Close ticket #${id}. Resolution note (optional, up to 300 characters):`);if(r===null)return say("Cancelled. Ticket not closed.",1);guard(()=>{svc.close(id,r);say(`✓ Ticket #${id} closed.`,1);render()})};
+function reset(){$("eid").value="";["cn","is"].forEach(i=>$(i).value="");$("pr").value="Medium";$("stw").hidden=true;$("ft").textContent="➕ Create ticket";$("save").textContent="Create ticket";$("cancel").hidden=true}
+$("save").onclick=()=>{const id=$("eid").value;guard(()=>{if(id){const t=svc.get(id),o=t.status==="Closed"?{status:$("stt").value}:{customer_name:$("cn").value,issue:$("is").value,priority:$("pr").value,status:$("stt").value};svc.update(id,o);say(`✓ Ticket #${id} updated.`,1)}else{const t=svc.create($("cn").value,$("is").value,$("pr").value);say(`✓ Ticket #${t.id} created for ${t.customer_name} (${t.priority}, Open).`,1)}reset();rows=null;render()})};
+$("cancel").onclick=()=>{reset();say("")};$("fs").onchange=$("fp").onchange=()=>{rows=null;render()};
+$("sb").onclick=()=>guard(()=>{const k=$("sq").value;rows=svc.search(k,$("fs").value,$("fp").value);say(rows.length?`✓ ${rows.length} ticket(s) found.`:"No tickets found for that search.",rows.length>0);render()});
+$("clr").onclick=()=>{rows=null;$("sq").value="";$("fs").value="";$("fp").value="";say("");render()};
+$("seed").onclick=()=>{const n=seed(repo);say(n?`✓ Added ${n} demo tickets.`:"✗ Demo data is added only when the database is empty.",n>0);render()};
+$("wipe").onclick=()=>{if(confirm("Delete all tickets and start a new database?")){repo.wipe();rows=null;$("dc").hidden=true;say("✓ Database is empty.",1);render()}};
+function dl(n,t,m){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click()}
+$("etxt").onclick=()=>dl("summary_report.txt",report(svc,false,new Date()),"text/plain");$("emd").onclick=()=>dl("summary_report.md",report(svc,true,new Date()),"text/markdown");
+render();
+</script></body></html>
