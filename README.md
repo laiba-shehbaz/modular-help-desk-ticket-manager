@@ -295,10 +295,4 @@ Task4_HelpDesk_Ticket_Manager/
 
 ---
 
-## 👤 Author & Assessment
-
-| | |
-|---|---|
-| **Author** | Laiba Shehbaz |
-| **Assessment** | Python Programming - Advanced Level |
-| **Domain / Task** | Domain 3 - Task 4 (Modular Help-Desk Ticket Manager) |
+**Author:** Laiba Shehbaz | Modular Help-Desk Ticket Manager
